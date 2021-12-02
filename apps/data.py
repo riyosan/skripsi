@@ -151,3 +151,6 @@ def app():
     f1_df = pd.DataFrame.from_dict(f1_train_list, orient='index', columns=['F1'])
     df = pd.concat([acc_df, mcc_df, f1_df], axis=1)
     st.write(df)
+    
+    import joblib
+    joblib.dump(stack_model, 'stack_model.pkl')
