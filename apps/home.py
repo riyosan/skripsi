@@ -16,7 +16,7 @@ def prepro(df):
 	df['selisih']=(df.enrolled_date-df.first_open).astype('timedelta64[h]')
 	df.loc[df.selisih>24, 'enrolled'] = 0
 #import top_screen
-	top_screens=pd.read_csv('top_screens.csv')
+	top_screens=pd.read_csv('/content/skripsi/top_screens.csv')
 	top_screens=np.array(top_screens.loc[:,'top_screens'])
 	for i in top_screens:
 		df[i]=df.screen_list.str.contains(i).astype(int)
@@ -58,7 +58,7 @@ def prepro(df):
 	plot=korelasi.plot.bar(title='korelasi variabel')
 	st.set_option('deprecation.showPyplotGlobalUse', False)
 	st.pyplot()
-	df_numerik.to_csv('data/main_data.csv', index=False)
+	df_numerik.to_csv('/content/skripsi/data', index=False)
 def app():
 	global data
 	filenya=upload_dataset()
@@ -69,5 +69,5 @@ def app():
 			prepro(df)
 	else:
 		if st.button('Press to use Example Dataset'):
-			df = pd.read_csv('fintech_data.csv')
+			df = pd.read_csv('/content/skripsi/fintech_data.csv')
 			prepro(df)
