@@ -11,7 +11,7 @@ def app():
     st.markdown("Please upload data through `Home` page!")
   else:
     df = pd.read_csv('/content/skripsi/data/main_data.csv')
-    df1=pd.read_csv('/content/skripsi/data/df_copy.csv')
+    df1=pd.read_csv('/content/skripsi/data/df1.csv')
     var_enrolled = np.array(df['enrolled'])
     from sklearn.model_selection import train_test_split
     X_train, X_test, y_train, y_test = train_test_split(np.array(df.drop(labels=['enrolled'], axis=1)), var_enrolled, test_size=0.2, random_state=111)
