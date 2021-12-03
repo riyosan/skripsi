@@ -12,7 +12,7 @@ st.markdown("""
 Multi-page app ini dibuat dengan sepenuh hati.
 
 """)
-image=Image.open('logo.png')
+image=Image.open('/content/skripsi/logo.png')
 logo = st.columns((1, 1, 1))
 
 #page layout
