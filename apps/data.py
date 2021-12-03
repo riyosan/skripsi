@@ -11,6 +11,7 @@ def app():
     st.markdown("Please upload data through `Home` page!")
   else:
     df = pd.read_csv('/content/skripsi/data/main_data.csv')
+    df1=pd.read_csv('/content/skripsi/data/df_copy.csv')
     var_enrolled = np.array(df['enrolled'])
     from sklearn.model_selection import train_test_split
     X_train, X_test, y_train, y_test = train_test_split(np.array(df.drop(labels=['enrolled'], axis=1)), var_enrolled, test_size=0.2, random_state=111)
@@ -144,8 +145,6 @@ def app():
     'rf': rf_train_f1,
     'stack': stack_model_train_f1}
 
-    import pandas as pd
-
     acc_df = pd.DataFrame.from_dict(acc_train_list, orient='index', columns=['Accuracy'])
     mcc_df = pd.DataFrame.from_dict(mcc_train_list, orient='index', columns=['MCC'])
     f1_df = pd.DataFrame.from_dict(f1_train_list, orient='index', columns=['F1'])
@@ -154,3 +153,16 @@ def app():
     
     import joblib
     joblib.dump(stack_model, 'stack_model.pkl')
+
+    var_enrolled = df1['enrolled']
+    #membagi menjadi train dan test untuk mencari user id
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(df1, var_enrolled, test_size=0.2, random_state=111)
+    train_id = X_train['user']
+    test_id = X_test['user']
+    #menggabungkan semua
+    y_pred_series = pd.Series(y_test).rename('asli',inplace=True)
+    hasil_akhir = pd.concat([y_pred_series, test_id], axis=1).dropna()
+    hasil_akhir['prediksi']=y_test_pred
+    hasil_akhir = hasil_akhir[['user','asli','prediksi']].reset_index(drop=True)
+    st.write(hasil_akhir)
