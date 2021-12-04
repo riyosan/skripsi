@@ -70,7 +70,6 @@ def prepro(df1):
   df.drop(columns=layar_cc, inplace=True)
   #menghilangkan kolom yang ga relevan
   df_numerik=df.drop(columns=['user','first_open','screen_list','enrolled_date','selisih'], inplace=False)
-  df_types = df.dtypes.astype(str)
   st.write(df_numerik)
   #membuat plot korelasi tiap kolom dengan enrolled
   korelasi = df_numerik.drop(columns=['enrolled'], inplace=False).corrwith(df_numerik.enrolled)
