@@ -16,12 +16,13 @@ def app():
     from sklearn.model_selection import train_test_split
     X_train, X_test, y_train, y_test = train_test_split(np.array(df.drop(labels=['enrolled'], axis=1)), var_enrolled, test_size=0.2, random_state=111)
     st.write(X_test)
+    #seleksi fitur menggunakan information gain
     from sklearn.feature_selection import mutual_info_classif
     #determine the mutual information
     mutual_info = mutual_info_classif(X_train, y_train)
     mutual_info
     mutual_info = pd.Series(mutual_info)
-    #mutual_info.index = X_train.columns
+    # mutual_info.index = X_train.columns
     mutual_info.sort_values(ascending=False)
     mutual_info.sort_values(ascending=False).plot.bar(title='urutannya')
     st.set_option('deprecation.showPyplotGlobalUse', False)
@@ -29,7 +30,9 @@ def app():
     from sklearn.feature_selection import SelectKBest
     sel_five_cols = SelectKBest(mutual_info_classif, k=10)
     sel_five_cols.fit(X_train, y_train)
-    #X_train.columns[sel_five_cols.get_support()]
+    # X_train.columns[sel_five_cols.get_support()]
+    # ou = X_train.columns[sel_five_cols.get_support()]
+    # pd.Series(ou).to_csv('/content/skripsi/data/fitur_pilihan.csv',index=False)
     from sklearn.preprocessing import StandardScaler
     sc_X = StandardScaler()
     X_train = sc_X.fit_transform(X_train)
@@ -154,7 +157,7 @@ def app():
     st.write(df)
     
     import joblib
-    joblib.dump(stack_model, 'stack_model.pkl')
+    joblib.dump(stack_model, '/content/skripsi/data/stack_model.pkl')
 
     var_enrolled = df1['enrolled']
     #membagi menjadi train dan test untuk mencari user id
