@@ -34,6 +34,8 @@ def app():
     sc_X = StandardScaler()
     X_train = sc_X.fit_transform(X_train)
     X_test = sc_X.transform(X_test)
+    import joblib
+    joblib.dump(sc_X, '/content/skripsi/data/minmax_scaler.joblib')
     from sklearn.metrics import accuracy_score
     from sklearn.metrics import matthews_corrcoef
     from sklearn.metrics import f1_score
