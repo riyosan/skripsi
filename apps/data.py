@@ -12,9 +12,8 @@ def app():
   else:
     df = pd.read_csv('/content/skripsi/data/main_data.csv')
     df1=pd.read_csv('/content/skripsi/data/df1.csv')
-    var_enrolled = np.array(df['enrolled'])
     from sklearn.model_selection import train_test_split
-    X_train, X_test, y_train, y_test = train_test_split(np.array(df.drop(labels=['enrolled'], axis=1)), var_enrolled, test_size=0.2, random_state=111)
+    X_train, X_test, y_train, y_test = train_test_split(df_numerik.drop(labels=['enrolled'], axis=1), df_numerik['enrolled'], test_size=0.3, random_state=111)
     st.write(X_test)
     #seleksi fitur menggunakan information gain
     from sklearn.feature_selection import mutual_info_classif
@@ -22,17 +21,26 @@ def app():
     mutual_info = mutual_info_classif(X_train, y_train)
     mutual_info
     mutual_info = pd.Series(mutual_info)
-    # mutual_info.index = X_train.columns
+    mutual_info.index = X_train.columns
     mutual_info.sort_values(ascending=False)
     mutual_info.sort_values(ascending=False).plot.bar(title='urutannya')
     st.set_option('deprecation.showPyplotGlobalUse', False)
     st.pyplot()
     from sklearn.feature_selection import SelectKBest
-    sel_five_cols = SelectKBest(mutual_info_classif, k=10)
-    sel_five_cols.fit(X_train, y_train)
-    # X_train.columns[sel_five_cols.get_support()]
-    # ou = X_train.columns[sel_five_cols.get_support()]
-    # pd.Series(ou).to_csv('/content/skripsi/data/fitur_pilihan.csv',index=False)
+    fiture_terpilih = SelectKBest(mutual_info_classif, k=20)
+    fiture_terpilih.fit(X_train, y_train)
+    X_train.columns[sel_five_cols.get_support()]
+    pilhan_kolom=X_train.columns[(fiture_terpilih.get_support())]
+    pd.Series(pilhan_kolom).to_csv('fitur_pilihan.csv',index=False)
+    fitur = pd.read_csv('/content/skripsi/data/fitur_pilihan.csv')
+    #merubah df menjadi list
+    fitur = fitur['0'].tolist()
+    X_train = X_train[fitur]
+    X_test = X_test[fitur]
+    X_train = X_train.to_numpy()
+    X_test = X_test.to_numpy()
+    y_train = y_train.to_numpy()
+    y_test = y_test.to_numpy()
     from sklearn.preprocessing import StandardScaler
     sc_X = StandardScaler()
     X_train = sc_X.fit_transform(X_train)
@@ -161,8 +169,7 @@ def app():
 
     var_enrolled = df1['enrolled']
     #membagi menjadi train dan test untuk mencari user id
-    from sklearn.model_selection import train_test_split
-    X_train, X_test, y_train, y_test = train_test_split(df1, var_enrolled, test_size=0.2, random_state=111)
+    X_train, X_test, y_train, y_test = train_test_split(df1, df1['enrolled'], test_size=0.3, random_state=111)
     train_id = X_train['user']
     test_id = X_test['user']
     #menggabungkan semua
