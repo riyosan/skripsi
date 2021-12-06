@@ -31,7 +31,7 @@ def app():
     fiture_terpilih.fit(X_train, y_train)
     X_train.columns[sel_five_cols.get_support()]
     pilhan_kolom=X_train.columns[(fiture_terpilih.get_support())]
-    pd.Series(pilhan_kolom).to_csv('fitur_pilihan.csv',index=False)
+    pd.Series(pilhan_kolom).to_csv('/content/skripsi/data/fitur_pilihan.csv',index=False)
     fitur = pd.read_csv('/content/skripsi/data/fitur_pilihan.csv')
     #merubah df menjadi list
     fitur = fitur['0'].tolist()
