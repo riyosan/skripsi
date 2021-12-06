@@ -13,7 +13,7 @@ def app():
     df = pd.read_csv('/content/skripsi/data/main_data.csv')
     df1=pd.read_csv('/content/skripsi/data/df1.csv')
     from sklearn.model_selection import train_test_split
-    X_train, X_test, y_train, y_test = train_test_split(df_numerik.drop(labels=['enrolled'], axis=1), df_numerik['enrolled'], test_size=0.3, random_state=111)
+    X_train, X_test, y_train, y_test = train_test_split(df.drop(labels=['enrolled'], axis=1), df['enrolled'], test_size=0.3, random_state=111)
     st.write(X_test)
     #seleksi fitur menggunakan information gain
     from sklearn.feature_selection import mutual_info_classif
@@ -29,7 +29,7 @@ def app():
     from sklearn.feature_selection import SelectKBest
     fiture_terpilih = SelectKBest(mutual_info_classif, k=20)
     fiture_terpilih.fit(X_train, y_train)
-    X_train.columns[sel_five_cols.get_support()]
+    X_train.columns[fiture_terpilih.get_support()]
     pilhan_kolom=X_train.columns[(fiture_terpilih.get_support())]
     pd.Series(pilhan_kolom).to_csv('/content/skripsi/data/fitur_pilihan.csv',index=False)
     fitur = pd.read_csv('/content/skripsi/data/fitur_pilihan.csv')
