@@ -56,7 +56,8 @@ def prepro_pred(pred):
   model = joblib.load('/content/skripsi/data/stack_model.pkl')
   prediksi = model.predict(pred_numerik)
   user_id = pred['user']
-  hasil_akhir= pd.concat([prediksi,user_id], axis=1).dropna()
+  prediksi_akhir = pd.Series(prediksi)
+  hasil_akhir= pd.concat([user_id,prediksi_akhir], axis=1).dropna()
   st.write(hasil_akhir)
 def app():
   global data_pred
