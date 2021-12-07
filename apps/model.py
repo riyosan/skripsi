@@ -46,17 +46,18 @@ def prepro_pred(pred):
   pred['jumlah_cc']=pred[layar_cc].sum(axis=1)
   pred.drop(columns=layar_cc, inplace=True)
   #mendefenisikan variabel numerik
-  pred_numerik=pred.drop(columns=['first_open','screen_list'], inplace=False)
+  pred_numerik=pred.drop(columns=['first_open','screen_list','user'], inplace=False)
   st.write(pred_numerik)
   scaler = joblib.load('/content/skripsi/data/minmax_scaler.joblib')
-  kolom_training = [i for i in pred_numerik.columns if i not in['user']]
-  pred_numerik[kolom_training] = scaler.transform(pred_numerik[kolom_training])
   fitur = pd.read_csv('/content/skripsi/data/fitur_pilihan.csv')
   fitur = fitur['0'].tolist()
   pred_numerik = pred_numerik[fitur]
+  pred_numerik = scaler.transform(pred_numerik)
   model = joblib.load('/content/skripsi/data/stack_model.pkl')
   prediksi = model.predict(pred_numerik)
-  st.write(real_prediksi)
+  user_id = pred['user']
+  hasil_akhir= pd.concat([prediksi,user_id], axis=1).dropna()
+  st.write(hasil_akhir)
 def app():
   global data_pred
   filenya=upload_dataset_pred()
