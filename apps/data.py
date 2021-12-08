@@ -13,6 +13,8 @@ def app():
     # Sidebar - Specify parameter settings
     with st.sidebar.header('2. Set Parameters'):
       split_size = st.sidebar.slider('Data split ratio (% for Training Set)', 10, 90, 80, 5)
+      parameter_n_estimators = st.sidebar.slider('Number of estimators (n_estimators)', 2, 10, 5, 1)
+      
     if st.sidebar.button('Press to Train'):  
       df = pd.read_csv('/content/skripsi/data/main_data.csv')
       df1=pd.read_csv('/content/skripsi/data/df1.csv')
@@ -84,7 +86,7 @@ def app():
 
       from sklearn.ensemble import RandomForestClassifier
 
-      rf = RandomForestClassifier(n_estimators=10) # Define classifier
+      rf = RandomForestClassifier(n_estimators=parameter_n_estimators) # Define classifier
       rf.fit(X_train, y_train) # Train model
 
       # Make predictions
@@ -120,7 +122,7 @@ def app():
 
       # Build stack model
       stack_model = StackingClassifier(
-          estimators=estimator_list, final_estimator=KNeighborsClassifier(3)
+          estimators=estimator_list, final_estimator=KNeighborsClassifier(parameter_n_estimators)
       )
 
       # Train stacked model
