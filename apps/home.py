@@ -87,6 +87,6 @@ def app():
 			st.write(df1)
 			prepro(df1)
 	else:
-		if st.button('Press to use Example Dataset'):
+		if st.sidebar.button('Press to use Example Dataset'):
 			df1 = pd.read_csv('/content/skripsi/fintech_data.csv')
 			prepro(df1)
