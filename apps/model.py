@@ -55,10 +55,15 @@ def prepro_pred(pred):
   pred_numerik = scaler.transform(pred_numerik)
   model = joblib.load('/content/skripsi/data/stack_model.pkl')
   prediksi = model.predict(pred_numerik)
+  probabilitas = model.predict_proba(pred_numerik)
   user_id = pred['user']
   prediksi_akhir = pd.Series(prediksi)
   hasil_akhir= pd.concat([user_id,prediksi_akhir], axis=1).dropna()
-  st.write(hasil_akhir)
+  layout = st.columns((1,1,1,1,1,1))
+  with layout[0]:
+    st.write(hasil_akhir)
+  with layout[1]:
+    st.write(probabilitas)
 def app():
   global data_pred
   filenya=upload_dataset_pred()
