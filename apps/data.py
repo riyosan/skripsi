@@ -18,41 +18,27 @@ def app():
     if st.sidebar.button('Press to Train'):  
       df = pd.read_csv('/content/skripsi/data/main_data.csv')
       df1=pd.read_csv('/content/skripsi/data/df1.csv')
-      from sklearn.model_selection import train_test_split
-      X_train, X_test, y_train, y_test = train_test_split(df.drop(labels=['enrolled'], axis=1), df['enrolled'],test_size=(100-split_size)/100, random_state=111)
-      st.write(X_test)
-      #seleksi fitur menggunakan information gain
       from sklearn.feature_selection import mutual_info_classif
       #determine the mutual information
-      mutual_info = mutual_info_classif(X_train, y_train)
-      mutual_info
+      mutual_info = mutual_info_classif(df.drop(columns=['enrolled']), df.enrolled)
       mutual_info = pd.Series(mutual_info)
-      mutual_info.index = X_train.columns
+      mutual_info.index = df.drop(columns=['enrolled']).columns
       mutual_info.sort_values(ascending=False)
-      mutual_info.sort_values(ascending=False).plot.bar(title='urutannya')
-      st.set_option('deprecation.showPyplotGlobalUse', False)
-      st.pyplot()
       from sklearn.feature_selection import SelectKBest
-      fiture_terpilih = SelectKBest(mutual_info_classif, k=20)
-      fiture_terpilih.fit(X_train, y_train)
-      X_train.columns[fiture_terpilih.get_support()]
-      pilhan_kolom=X_train.columns[(fiture_terpilih.get_support())]
+      fitur_terpilih = SelectKBest(mutual_info_classif, k=20)
+      fitur_terpilih.fit(df.drop(columns=['enrolled']), df.enrolled)
+      pilhan_kolom = df.drop(columns=['enrolled']).columns[fitur_terpilih.get_support()]
       pd.Series(pilhan_kolom).to_csv('/content/skripsi/data/fitur_pilihan.csv',index=False)
-      fitur = pd.read_csv('/content/skripsi/data/fitur_pilihan.csv')
-      #merubah df menjadi list
-      fitur = fitur['0'].tolist()
-      X_train = X_train[fitur]
-      X_test = X_test[fitur]
-      X_train = X_train.to_numpy()
-      X_test = X_test.to_numpy()
-      y_train = y_train.to_numpy()
-      y_test = y_test.to_numpy()
+      fitur = pilhan_kolom.tolist()
+      baru = df[fitur]
       from sklearn.preprocessing import StandardScaler
       sc_X = StandardScaler()
-      X_train = sc_X.fit_transform(X_train)
-      X_test = sc_X.transform(X_test)
+      pilhan_kolom = sc_X.fit_transform(baru)
       import joblib
       joblib.dump(sc_X, '/content/skripsi/data/minmax_scaler.joblib')
+      from sklearn.model_selection import train_test_split
+      X_train, X_test, y_train, y_test = train_test_split(pilhan_kolom, df['enrolled'],test_size=(100-split_size)/100, random_state=111)
+      st.write(X_test)
       from sklearn.metrics import accuracy_score
       from sklearn.metrics import matthews_corrcoef
       from sklearn.metrics import f1_score
