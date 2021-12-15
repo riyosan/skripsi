@@ -76,6 +76,15 @@ def prepro(df1):
   plot=korelasi.plot.bar(title='korelasi variabel')
   st.set_option('deprecation.showPyplotGlobalUse', False)
   st.pyplot()
+  from sklearn.feature_selection import mutual_info_classif
+  #determine the mutual information
+  mutual_info = mutual_info_classif(df_numerik.drop(columns=['enrolled']), df_numerik.enrolled)
+  mutual_info = pd.Series(mutual_info)
+  mutual_info.index = df_numerik.drop(columns=['enrolled']).columns
+  mutual_info.sort_values(ascending=False)
+  mutual_info.sort_values(ascending=False).plot.bar(title='urutannya')
+  st.set_option('deprecation.showPyplotGlobalUse', False)
+  st.pyplot()
   df_numerik.to_csv('/content/skripsi/data/main_data.csv', index=False)
   df1.to_csv('/content/skripsi/data/df1.csv', index=False)
 def app():
