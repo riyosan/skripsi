@@ -13,6 +13,7 @@ def app():
     # Sidebar - Specify parameter settings
     with st.sidebar.header('2. Set Parameters'):
       split_size = st.sidebar.slider('Data split ratio (% for Training Set)', 10, 90, 80, 5)
+      jumlah_fitur = st.sidebar.slider('jumlah pilihan fitur (for Training Set)', 5, 47, 20, 5)
       parameter_n_estimators = st.sidebar.slider('Number of estimators (n_estimators)', 2, 10, 5, 1)
       
     if st.sidebar.button('Press to Train'):  
@@ -25,7 +26,7 @@ def app():
       mutual_info.index = df.drop(columns=['enrolled']).columns
       mutual_info.sort_values(ascending=False)
       from sklearn.feature_selection import SelectKBest
-      fitur_terpilih = SelectKBest(mutual_info_classif, k=20)
+      fitur_terpilih = SelectKBest(mutual_info_classif, k=jumlah_fitur)
       fitur_terpilih.fit(df.drop(columns=['enrolled']), df.enrolled)
       pilhan_kolom = df.drop(columns=['enrolled']).columns[fitur_terpilih.get_support()]
       pd.Series(pilhan_kolom).to_csv('/content/skripsi/data/fitur_pilihan.csv',index=False)
