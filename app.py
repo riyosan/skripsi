@@ -1,5 +1,5 @@
 import streamlit as st
-st.set_page_config(page_title='Skripsick', layout='wide')
+st.set_page_config(page_title='Skripsi', layout='wide')
 from PIL import Image
 from multiapp import MultiApp
 from apps import home, data, model # import your app modules here
@@ -7,9 +7,10 @@ from apps import home, data, model # import your app modules here
 app = MultiApp()
 
 st.markdown("""
-# Skripsick
+# Skripsi
 
-Multi-page app ini dibuat dengan sepenuh hati.
+Penggunaan Algoritma Stacking Ensemble Learning 
+Dalam Memprediksi Pengguna Enroll.
 
 """)
 image=Image.open('/content/skripsi/logo.png')
